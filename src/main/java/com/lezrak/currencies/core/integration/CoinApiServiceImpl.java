@@ -3,9 +3,11 @@ package com.lezrak.currencies.core.integration;
 import com.lezrak.currencies.core.exchange.rate.ExchangeRate;
 import com.lezrak.currencies.core.exchange.rate.ExchangeRateList;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
+import com.lezrak.currencies.exception.ThirdPartyApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -28,7 +30,7 @@ public class CoinApiServiceImpl implements CoinApiService {
     private Logger logger = LoggerFactory.getLogger(CoinApiServiceImpl.class);
 
     @Override
-    public List<ExchangeRate> getExchangeRateList(String currency) throws CurrencyNotFoundException {
+    public List<ExchangeRate> getExchangeRateList(String currency) throws ThirdPartyApiException, CurrencyNotFoundException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HEADER_NAME, HEADER_VALUE);
@@ -39,7 +41,7 @@ public class CoinApiServiceImpl implements CoinApiService {
                     URL_PREFIX + currency, HttpMethod.GET, new HttpEntity(headers), ExchangeRateList.class);
         } catch (HttpClientErrorException.Unauthorized e) {
             logger.error(String.format("Third party api authorization failed for: %s", THIRD_PARTY_NAME));
-            throw new RuntimeException();
+            throw new ThirdPartyApiException();
         }
 
         ExchangeRateList exchangeRateList = response.getBody();
@@ -52,7 +54,7 @@ public class CoinApiServiceImpl implements CoinApiService {
     private void evaluateExchangeRateList(ExchangeRateList exchangeRateList, String currency) {
         if (exchangeRateList == null) {
             logger.error(String.format("Third party api unexpected behaviour: %s", THIRD_PARTY_NAME));
-            throw new RuntimeException();
+            throw new ThirdPartyApiException();
         }
 
         if (exchangeRateList.getRates().size() == 0) {
