@@ -5,14 +5,13 @@ import com.lezrak.currencies.currency.exchange.evaluation.ExchangeEvaluationResp
 import com.lezrak.currencies.currency.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
-import com.lezrak.currencies.exception.ThirdPartyApiException;
 import com.lezrak.currencies.exception.WrongAmountException;
 
 import java.util.List;
 
 public interface CurrencyService {
 
-    ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException, ThirdPartyApiException;
+    ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException;
 
-    ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws ThirdPartyApiException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException;
+    ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws CurrencyNotFoundException, WrongAmountException, BlankCurrencyException;
 }

@@ -8,7 +8,6 @@ import com.lezrak.currencies.currency.exchange.rate.ExchangeRate;
 import com.lezrak.currencies.currency.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
-import com.lezrak.currencies.exception.ThirdPartyApiException;
 import com.lezrak.currencies.exception.WrongAmountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 
     @Override
-    public ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException, ThirdPartyApiException {
+    public ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException {
 
         List<ExchangeRate> ratesList = coinApiService.getExchangeRateList(currency);
 
@@ -64,7 +63,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 
     @Override
-    public ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws ThirdPartyApiException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException {
+    public ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws CurrencyNotFoundException, WrongAmountException, BlankCurrencyException {
 
         validate(exchangeEvaluationRequest);
 
