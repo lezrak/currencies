@@ -1,17 +1,20 @@
 package com.lezrak.currencies.currency.exchange.rate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 public class ExchangeRate {
 
-    private String asset_id_quote;
+    @JsonProperty("asset_id_quote")
+    private String assetIdQuote;
     private BigDecimal rate;
 
     public ExchangeRate() {
     }
 
-    public String getAsset_id_quote() {
-        return asset_id_quote;
+    public String getAssetIdQuote() {
+        return assetIdQuote;
     }
 
     public BigDecimal getRate() {

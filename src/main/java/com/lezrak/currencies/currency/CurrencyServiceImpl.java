@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toMap;
+
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
@@ -48,13 +50,13 @@ public class CurrencyServiceImpl implements CurrencyService {
 
         Map<String, BigDecimal> rates;
         if (filter != null) {
-            HashSet filterSet = new HashSet<>(filter);
+            Set filterSet = new HashSet<>(filter);
             rates = ratesList.stream()
-                    .filter(exchangeRate -> filterSet.contains(exchangeRate.getAsset_id_quote()))
-                    .collect(Collectors.toMap(ExchangeRate::getAsset_id_quote, ExchangeRate::getRate));
+                    .filter(exchangeRate -> filterSet.contains(exchangeRate.getAssetIdQuote()))
+                    .collect(toMap(ExchangeRate::getAssetIdQuote, ExchangeRate::getRate));
         } else {
             rates = ratesList.stream()
-                    .collect(Collectors.toMap(ExchangeRate::getAsset_id_quote, ExchangeRate::getRate));
+                    .collect(toMap(ExchangeRate::getAssetIdQuote, ExchangeRate::getRate));
         }
 
         return new ExchangeRateListDTO(currency, rates);
@@ -71,7 +73,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         Map<String, ExchangeEvaluation> to = rates.getRates().entrySet().parallelStream()
                 .map(entry -> new ExchangeEvaluation(entry.getKey(), entry.getValue(), exchangeEvaluationRequest.getAmount()))
                 .map(ExchangeEvaluation::evaluate)
-                .collect(Collectors.toMap(ExchangeEvaluation::getCurrency, Function.identity()));
+                .collect(toMap(ExchangeEvaluation::getCurrency, Function.identity()));
 
         return new ExchangeEvaluationResponse(exchangeEvaluationRequest.getFrom(), to);
     }
@@ -89,7 +91,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     private void validate(List<String> filter, List<ExchangeRate> exchangeRateList) throws CurrencyNotFoundException {
         if (filter != null) {
             Set<String> currencies = exchangeRateList.stream()
-                    .map(ExchangeRate::getAsset_id_quote)
+                    .map(ExchangeRate::getAssetIdQuote)
                     .collect(Collectors.toSet());
 
             List<String> notFoundCurrencies = filter.stream()
