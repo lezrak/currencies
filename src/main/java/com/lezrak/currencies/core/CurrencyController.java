@@ -5,7 +5,7 @@ import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationResponse
 import com.lezrak.currencies.core.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
-import com.lezrak.currencies.exception.ThirdPartyApiException;
+import com.lezrak.currencies.exception.ExternalServiceException;
 import com.lezrak.currencies.exception.WrongAmountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ public class CurrencyController {
             return currencyService.getRates(currency, filter);
         } catch (CurrencyNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
-        } catch (ThirdPartyApiException ex) {
+        } catch (ExternalServiceException ex) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
         }
     }
@@ -43,7 +43,7 @@ public class CurrencyController {
             return currencyService.evaluateExchange(exchangeEvaluationRequest);
         } catch (CurrencyNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (ThirdPartyApiException e) {
+        } catch (ExternalServiceException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         } catch (WrongAmountException | BlankCurrencyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
