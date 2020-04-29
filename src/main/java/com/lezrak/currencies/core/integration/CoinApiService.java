@@ -1,6 +1,6 @@
-package com.lezrak.currencies.currency.coinapi;
+package com.lezrak.currencies.core.integration;
 
-import com.lezrak.currencies.currency.exchange.rate.ExchangeRate;
+import com.lezrak.currencies.core.exchange.rate.ExchangeRate;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 
 import java.util.List;

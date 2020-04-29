@@ -1,4 +1,4 @@
-package com.lezrak.currencies.currency.exchange.rate;
+package com.lezrak.currencies.core.exchange.rate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

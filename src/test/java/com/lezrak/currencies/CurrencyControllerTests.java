@@ -1,7 +1,7 @@
 package com.lezrak.currencies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lezrak.currencies.currency.exchange.evaluation.ExchangeEvaluationRequest;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

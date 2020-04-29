@@ -1,11 +1,11 @@
-package com.lezrak.currencies.currency;
+package com.lezrak.currencies.core;
 
-import com.lezrak.currencies.currency.coinapi.CoinApiService;
-import com.lezrak.currencies.currency.exchange.evaluation.ExchangeEvaluation;
-import com.lezrak.currencies.currency.exchange.evaluation.ExchangeEvaluationRequest;
-import com.lezrak.currencies.currency.exchange.evaluation.ExchangeEvaluationResponse;
-import com.lezrak.currencies.currency.exchange.rate.ExchangeRate;
-import com.lezrak.currencies.currency.exchange.rate.ExchangeRateListDTO;
+import com.lezrak.currencies.core.integration.CoinApiService;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluation;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationRequest;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationResponse;
+import com.lezrak.currencies.core.exchange.rate.ExchangeRate;
+import com.lezrak.currencies.core.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
 import com.lezrak.currencies.exception.WrongAmountException;

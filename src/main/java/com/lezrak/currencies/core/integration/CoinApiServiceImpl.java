@@ -1,7 +1,7 @@
-package com.lezrak.currencies.currency.coinapi;
+package com.lezrak.currencies.core.integration;
 
-import com.lezrak.currencies.currency.exchange.rate.ExchangeRate;
-import com.lezrak.currencies.currency.exchange.rate.ExchangeRateList;
+import com.lezrak.currencies.core.exchange.rate.ExchangeRate;
+import com.lezrak.currencies.core.exchange.rate.ExchangeRateList;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

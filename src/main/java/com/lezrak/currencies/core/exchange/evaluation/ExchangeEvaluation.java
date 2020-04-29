@@ -1,10 +1,10 @@
-package com.lezrak.currencies.currency.exchange.evaluation;
+package com.lezrak.currencies.core.exchange.evaluation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 
-import static com.lezrak.currencies.currency.CurrencyServiceImpl.*;
+import static com.lezrak.currencies.core.CurrencyServiceImpl.*;
 
 public class ExchangeEvaluation {
 

@@ -1,4 +1,4 @@
-package com.lezrak.currencies.currency.exchange.evaluation;
+package com.lezrak.currencies.core.exchange.evaluation;
 
 
 import java.util.Map;
