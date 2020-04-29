@@ -42,7 +42,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
         List<ExchangeRate> ratesList = coinApiService.getExchangeRateList(currency);
 
-        checkFilterCorrectness(filter, ratesList);
+        validate(filter, ratesList);
 
         ratesList.forEach(o -> o.setRate(o.getRate().setScale(SCALE, ROUNDING_MODE)));
 
@@ -64,7 +64,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws ThirdPartyApiException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException {
 
-        checkExchangeEvaluationRequestCorrectness(exchangeEvaluationRequest);
+        validate(exchangeEvaluationRequest);
 
         ExchangeRateListDTO rates = getRates(exchangeEvaluationRequest.getFrom(), exchangeEvaluationRequest.getTo());
 
@@ -76,7 +76,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         return new ExchangeEvaluationResponse(exchangeEvaluationRequest.getFrom(), to);
     }
 
-    private void checkExchangeEvaluationRequestCorrectness(ExchangeEvaluationRequest exchangeEvaluationRequest) throws BlankCurrencyException, WrongAmountException {
+    private void validate(ExchangeEvaluationRequest exchangeEvaluationRequest) throws BlankCurrencyException, WrongAmountException {
         if (exchangeEvaluationRequest.getFrom() == null || exchangeEvaluationRequest.getFrom().trim().length() == 0) {
             throw new BlankCurrencyException();
         }
@@ -86,7 +86,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
 
-    private void checkFilterCorrectness(List<String> filter, List<ExchangeRate> exchangeRateList) throws CurrencyNotFoundException {
+    private void validate(List<String> filter, List<ExchangeRate> exchangeRateList) throws CurrencyNotFoundException {
         if (filter != null) {
             Set<String> currencies = exchangeRateList.stream()
                     .map(ExchangeRate::getAsset_id_quote)
