@@ -45,12 +45,12 @@ public class CoinApiServiceImpl implements CoinApiService {
 
         ExchangeRateList exchangeRateList = response.getBody();
 
-        evaluateExchangeRateList(exchangeRateList, currency);
+        validate(exchangeRateList, currency);
 
         return exchangeRateList.getRates();
     }
 
-    private void evaluateExchangeRateList(ExchangeRateList exchangeRateList, String currency) {
+    private void validate(ExchangeRateList exchangeRateList, String currency) {
         if (exchangeRateList == null) {
             logger.error(String.format("Third party api unexpected behaviour: %s", THIRD_PARTY_NAME));
             throw new ExternalServiceException();
