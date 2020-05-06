@@ -9,13 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.http.HttpMethod.GET;
 
 @Service
 public class CoinApiServiceImpl implements CoinApiService {
@@ -23,10 +24,16 @@ public class CoinApiServiceImpl implements CoinApiService {
     private static final String THIRD_PARTY_NAME = "coinapi.io";
     private static final String URL_PREFIX = "https://rest.coinapi.io/v1/exchangerate/";
     private static final String HEADER_NAME = "X-CoinAPI-Key";
+    private static final Logger LOG = LoggerFactory.getLogger(CoinApiServiceImpl.class);
+
+    private final RestTemplate restTemplate;
 
     @Value("${coinapi.apikey}")
     private String HEADER_VALUE;
-    private Logger logger = LoggerFactory.getLogger(CoinApiServiceImpl.class);
+
+    public CoinApiServiceImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public List<ExchangeRate> getExchangeRateList(String currency) throws ExternalServiceException, CurrencyNotFoundException {
@@ -34,16 +41,15 @@ public class CoinApiServiceImpl implements CoinApiService {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HEADER_NAME, HEADER_VALUE);
 
-        ResponseEntity<ExchangeRateList> response;
+        ExchangeRateList exchangeRateList;
         try {
-            response = new RestTemplate().exchange(
-                    URL_PREFIX + currency, HttpMethod.GET, new HttpEntity(headers), ExchangeRateList.class);
+            exchangeRateList = restTemplate.exchange(
+                    URL_PREFIX + currency, GET, new HttpEntity(headers), ExchangeRateList.class)
+                    .getBody();
         } catch (HttpClientErrorException.Unauthorized e) {
-            logger.error(String.format("Third party api authorization failed for: %s", THIRD_PARTY_NAME));
+            LOG.error(String.format("Third party api authorization failed for: %s", THIRD_PARTY_NAME));
             throw new ExternalServiceException();
         }
-
-        ExchangeRateList exchangeRateList = response.getBody();
 
         validate(exchangeRateList, currency);
 
@@ -51,14 +57,17 @@ public class CoinApiServiceImpl implements CoinApiService {
     }
 
     private void validate(ExchangeRateList exchangeRateList, String currency) {
-        if (exchangeRateList == null) {
-            logger.error(String.format("Third party api unexpected behaviour: %s", THIRD_PARTY_NAME));
-            throw new ExternalServiceException();
-        }
+        Optional.ofNullable(exchangeRateList)
+                .map(ExchangeRateList::getRates)
+                .orElseThrow(CoinApiServiceImpl::logAndThrow)
+                .stream()
+                .findAny()
+                .orElseThrow(() -> new CurrencyNotFoundException(currency));
+    }
 
-        if (exchangeRateList.getRates().size() == 0) {
-            throw new CurrencyNotFoundException(currency);
-        }
+    private static ExternalServiceException logAndThrow() {
+        LOG.error(String.format("Third party api unexpected behaviour: %s", THIRD_PARTY_NAME));
+        return new ExternalServiceException();
     }
 
 
