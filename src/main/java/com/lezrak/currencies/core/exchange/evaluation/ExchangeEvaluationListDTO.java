@@ -4,15 +4,13 @@ package com.lezrak.currencies.core.exchange.evaluation;
 import java.util.Map;
 
 
-public class ExchangeEvaluationResponse {
+public class ExchangeEvaluationListDTO {
 
     private String from;
     private Map<String, ExchangeEvaluation> to;
 
-    public ExchangeEvaluationResponse() {
-    }
 
-    public ExchangeEvaluationResponse(String from, Map<String, ExchangeEvaluation> to) {
+    public ExchangeEvaluationListDTO(String from, Map<String, ExchangeEvaluation> to) {
         this.from = from;
         this.to = to;
     }

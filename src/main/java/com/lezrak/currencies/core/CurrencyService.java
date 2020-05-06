@@ -1,7 +1,7 @@
 package com.lezrak.currencies.core;
 
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationRequest;
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationResponse;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationList;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationListDTO;
 import com.lezrak.currencies.core.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
@@ -14,5 +14,5 @@ public interface CurrencyService {
 
     ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException, ExternalServiceException;
 
-    ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws ExternalServiceException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException;
+    ExchangeEvaluationListDTO evaluateExchange(ExchangeEvaluationList exchangeEvaluationList) throws ExternalServiceException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException;
 }

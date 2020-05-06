@@ -1,7 +1,7 @@
 package com.lezrak.currencies.core;
 
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationRequest;
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationResponse;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationList;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationListDTO;
 import com.lezrak.currencies.core.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
@@ -38,9 +38,9 @@ public class CurrencyController {
     }
 
     @PostMapping("/exchange")
-    public ExchangeEvaluationResponse evaluateExchange(@RequestBody ExchangeEvaluationRequest exchangeEvaluationRequest) {
+    public ExchangeEvaluationListDTO evaluateExchange(@RequestBody ExchangeEvaluationList exchangeEvaluationList) {
         try {
-            return currencyService.evaluateExchange(exchangeEvaluationRequest);
+            return currencyService.evaluateExchange(exchangeEvaluationList);
         } catch (CurrencyNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (ExternalServiceException e) {

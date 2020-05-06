@@ -2,8 +2,8 @@ package com.lezrak.currencies.core;
 
 import com.lezrak.currencies.core.integration.CoinApiService;
 import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluation;
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationRequest;
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationResponse;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationList;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationListDTO;
 import com.lezrak.currencies.core.exchange.rate.ExchangeRate;
 import com.lezrak.currencies.core.exchange.rate.ExchangeRateListDTO;
 import com.lezrak.currencies.exception.CurrencyNotFoundException;
@@ -64,26 +64,26 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 
     @Override
-    public ExchangeEvaluationResponse evaluateExchange(ExchangeEvaluationRequest exchangeEvaluationRequest) throws ExternalServiceException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException {
+    public ExchangeEvaluationListDTO evaluateExchange(ExchangeEvaluationList exchangeEvaluationList) throws ExternalServiceException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException {
 
-        validate(exchangeEvaluationRequest);
+        validate(exchangeEvaluationList);
 
-        ExchangeRateListDTO rates = getRates(exchangeEvaluationRequest.getFrom(), exchangeEvaluationRequest.getTo());
+        ExchangeRateListDTO rates = getRates(exchangeEvaluationList.getFrom(), exchangeEvaluationList.getTo());
 
         Map<String, ExchangeEvaluation> to = rates.getRates().entrySet().parallelStream()
-                .map(entry -> new ExchangeEvaluation(entry.getKey(), entry.getValue(), exchangeEvaluationRequest.getAmount()))
+                .map(entry -> new ExchangeEvaluation(entry.getKey(), entry.getValue(), exchangeEvaluationList.getAmount()))
                 .map(ExchangeEvaluation::evaluate)
                 .collect(toMap(ExchangeEvaluation::getCurrency, Function.identity()));
 
-        return new ExchangeEvaluationResponse(exchangeEvaluationRequest.getFrom(), to);
+        return new ExchangeEvaluationListDTO(exchangeEvaluationList.getFrom(), to);
     }
 
-    private void validate(ExchangeEvaluationRequest exchangeEvaluationRequest) throws BlankCurrencyException, WrongAmountException {
-        if (exchangeEvaluationRequest.getFrom() == null || exchangeEvaluationRequest.getFrom().trim().length() == 0) {
+    private void validate(ExchangeEvaluationList exchangeEvaluationList) throws BlankCurrencyException, WrongAmountException {
+        if (exchangeEvaluationList.getFrom() == null || exchangeEvaluationList.getFrom().trim().length() == 0) {
             throw new BlankCurrencyException();
         }
-        if (exchangeEvaluationRequest.getAmount().compareTo(BigDecimal.ZERO) < 1) {
-            throw new WrongAmountException(exchangeEvaluationRequest.getAmount().toString());
+        if (exchangeEvaluationList.getAmount().compareTo(BigDecimal.ZERO) < 1) {
+            throw new WrongAmountException(exchangeEvaluationList.getAmount().toString());
         }
     }
 

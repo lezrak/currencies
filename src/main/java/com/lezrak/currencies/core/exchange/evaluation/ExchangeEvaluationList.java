@@ -4,13 +4,13 @@ package com.lezrak.currencies.core.exchange.evaluation;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ExchangeEvaluationRequest {
+public class ExchangeEvaluationList {
 
     private String from;
     private List<String> to;
     private BigDecimal amount;
 
-    public ExchangeEvaluationRequest() {
+    public ExchangeEvaluationList() {
     }
 
     public void setFrom(String from) {

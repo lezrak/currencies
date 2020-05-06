@@ -15,8 +15,6 @@ public class ExchangeEvaluation {
     private BigDecimal result;
     private BigDecimal fee;
 
-    public ExchangeEvaluation() {
-    }
 
     public ExchangeEvaluation(String currency, BigDecimal rate, BigDecimal amount) {
         this.currency = currency;

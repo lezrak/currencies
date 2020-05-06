@@ -1,7 +1,7 @@
 package com.lezrak.currencies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationRequest;
+import com.lezrak.currencies.core.exchange.evaluation.ExchangeEvaluationList;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ class CurrencyControllerTests {
 
     @Test
     void exchangeEvaluationWorkEndToEnd() throws Exception {
-        ExchangeEvaluationRequest request = new ExchangeEvaluationRequest();
+        ExchangeEvaluationList request = new ExchangeEvaluationList();
         request.setAmount(BigDecimal.TEN);
         request.setFrom("BTC");
         request.setTo(Arrays.asList("USDT", "ETH"));
