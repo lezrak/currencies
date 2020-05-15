@@ -3,11 +3,12 @@ package com.lezrak.currencies.core.exchange.evaluation;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 public class ExchangeEvaluationList {
 
     private String from;
-    private List<String> to;
+    private Set<String> to;
     private BigDecimal amount;
 
     public ExchangeEvaluationList() {
@@ -17,7 +18,7 @@ public class ExchangeEvaluationList {
         this.from = from;
     }
 
-    public void setTo(List<String> to) {
+    public void setTo(Set<String> to) {
         this.to = to;
     }
 
@@ -29,7 +30,7 @@ public class ExchangeEvaluationList {
         return from;
     }
 
-    public List<String> getTo() {
+    public Set<String> getTo() {
         return to;
     }
 

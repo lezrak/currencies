@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,7 +42,7 @@ class CurrencyControllerTests {
         ExchangeEvaluationList request = new ExchangeEvaluationList();
         request.setAmount(BigDecimal.TEN);
         request.setFrom("BTC");
-        request.setTo(Arrays.asList("USDT", "ETH"));
+        request.setTo(new HashSet<>(Arrays.asList("USDT", "ETH")));
 
         mockMvc.perform(post("/api/v1/currencies/exchange")
                 .contentType("application/json")

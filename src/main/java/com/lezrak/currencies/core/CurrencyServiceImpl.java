@@ -10,18 +10,17 @@ import com.lezrak.currencies.exception.CurrencyNotFoundException;
 import com.lezrak.currencies.exception.BlankCurrencyException;
 import com.lezrak.currencies.exception.ExternalServiceException;
 import com.lezrak.currencies.exception.WrongAmountException;
+import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toMap;
 
 @Service
@@ -40,7 +39,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 
     @Override
-    public ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException, ExternalServiceException {
+    public ExchangeRateListDTO getRates(String currency, Set<String> filter) throws CurrencyNotFoundException, ExternalServiceException {
 
         List<ExchangeRate> ratesList = coinApiService.getExchangeRateList(currency);
 
@@ -48,16 +47,9 @@ public class CurrencyServiceImpl implements CurrencyService {
 
         ratesList.forEach(o -> o.setRate(o.getRate().setScale(SCALE, ROUNDING_MODE)));
 
-        Map<String, BigDecimal> rates;
-        if (filter != null) {
-            Set filterSet = new HashSet<>(filter);
-            rates = ratesList.stream()
-                    .filter(exchangeRate -> filterSet.contains(exchangeRate.getAssetIdQuote()))
+        Map<String, BigDecimal> rates = ratesList.stream()
+                    .filter(exchangeRate -> isRequested(exchangeRate, filter))
                     .collect(toMap(ExchangeRate::getAssetIdQuote, ExchangeRate::getRate));
-        } else {
-            rates = ratesList.stream()
-                    .collect(toMap(ExchangeRate::getAssetIdQuote, ExchangeRate::getRate));
-        }
 
         return new ExchangeRateListDTO(currency, rates);
     }
@@ -78,6 +70,12 @@ public class CurrencyServiceImpl implements CurrencyService {
         return new ExchangeEvaluationListDTO(exchangeEvaluationList.getFrom(), to);
     }
 
+    private boolean isRequested(ExchangeRate exchangeRate, Set<String> filterSet) {
+        return Optional.ofNullable(filterSet)
+                .map(filter -> filter.contains(exchangeRate.getAssetIdQuote()))
+                .orElse(true);
+    }
+
     private void validate(ExchangeEvaluationList exchangeEvaluationList) throws BlankCurrencyException, WrongAmountException {
         if (exchangeEvaluationList.getFrom() == null || exchangeEvaluationList.getFrom().trim().length() == 0) {
             throw new BlankCurrencyException();
@@ -88,7 +86,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
 
-    private void validate(List<String> filter, List<ExchangeRate> exchangeRateList) throws CurrencyNotFoundException {
+    private void validate(Set<String> filter, List<ExchangeRate> exchangeRateList) throws CurrencyNotFoundException {
         if (filter != null) {
             Set<String> currencies = exchangeRateList.stream()
                     .map(ExchangeRate::getAssetIdQuote)

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/currencies")
@@ -27,7 +28,7 @@ public class CurrencyController {
 
 
     @GetMapping("/{currency}")
-    public ExchangeRateListDTO getRates(@PathVariable String currency, @RequestParam(name = "filter[]", required = false) List<String> filter) {
+    public ExchangeRateListDTO getRates(@PathVariable String currency, @RequestParam(name = "filter[]", required = false) Set<String> filter) {
         try {
             return currencyService.getRates(currency, filter);
         } catch (CurrencyNotFoundException ex) {

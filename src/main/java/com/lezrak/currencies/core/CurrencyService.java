@@ -9,10 +9,11 @@ import com.lezrak.currencies.exception.ExternalServiceException;
 import com.lezrak.currencies.exception.WrongAmountException;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CurrencyService {
 
-    ExchangeRateListDTO getRates(String currency, List<String> filter) throws CurrencyNotFoundException, ExternalServiceException;
+    ExchangeRateListDTO getRates(String currency, Set<String> filter) throws CurrencyNotFoundException, ExternalServiceException;
 
     ExchangeEvaluationListDTO evaluateExchange(ExchangeEvaluationList exchangeEvaluationList) throws ExternalServiceException, CurrencyNotFoundException, WrongAmountException, BlankCurrencyException;
 }
